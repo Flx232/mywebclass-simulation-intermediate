@@ -1,0 +1,26 @@
+name: Load Test with Artillery and Playwright Report
+
+on:
+  push:
+	branches:
+  	- main
+
+jobs:
+  artillery-playwright:
+	runs-on: ubuntu-latest
+	steps:
+  	- uses: actions/checkout@v2
+  	- name: Install Artillery and Playwright
+    	run: |
+      	npm install -g artillery
+      	npx playwright install
+  	- name: Run Load Test and Playwright Report
+    	run: |
+      	artillery run my-load-test.yml -o artifacts/test-results/load-test.json && npx playwright test --reporter=html --output=artifacts/test-results/playwright-report.html
+  	- name: Upload Report as Artifact
+    	uses: actions/upload-artifact@v2
+    	with:
+      	name: Load Test and Playwright Report
+      	path: |
+        	./artifacts/test-results/load-test.json
+        	./artifacts/test-results/playwright-report.html
