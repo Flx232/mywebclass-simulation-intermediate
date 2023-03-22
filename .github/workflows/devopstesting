@@ -1,0 +1,18 @@
+name: DevOps Tools Testing and Evaluation
+
+on:
+  push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Add any necessary setup steps here, such as installing and configuring the tool being evaluated
+      - name: Run tool tests and generate report
+        run: command-to-run-tool-tests --reporter=dot,json --reporter-json-output=test-results/report.json
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Results
+          path: test-results/report.json
